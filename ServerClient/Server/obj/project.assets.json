@@ -8,20 +8,27 @@
     ".NETCoreApp,Version=v3.0": []
   },
   "packageFolders": {
-    "C:\\Users\\frede\\.nuget\\packages\\": {}
+    "C:\\Users\\frede\\.nuget\\packages\\": {},
+    "C:\\Microsoft\\Xamarin\\NuGet\\": {},
+    "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\frede\\Documents\\ClientServer\\ServerClient\\Server\\Server.csproj",
+      "projectUniqueName": "C:\\Users\\frede\\Documents\\GitHub\\ClientServer\\ServerClient\\Server\\Server.csproj",
       "projectName": "Server",
-      "projectPath": "C:\\Users\\frede\\Documents\\ClientServer\\ServerClient\\Server\\Server.csproj",
+      "projectPath": "C:\\Users\\frede\\Documents\\GitHub\\ClientServer\\ServerClient\\Server\\Server.csproj",
       "packagesPath": "C:\\Users\\frede\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\frede\\Documents\\ClientServer\\ServerClient\\Server\\obj\\",
+      "outputPath": "C:\\Users\\frede\\Documents\\GitHub\\ClientServer\\ServerClient\\Server\\obj\\",
       "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "C:\\Microsoft\\Xamarin\\NuGet\\",
+        "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+      ],
       "configFilePaths": [
         "C:\\Users\\frede\\AppData\\Roaming\\NuGet\\NuGet.Config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
       ],
       "originalTargetFrameworks": [
         "netcoreapp3.0"
