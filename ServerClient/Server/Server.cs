@@ -4,17 +4,29 @@ using System.Net.Sockets;
 
 namespace Server
 {
-    class Server
+    internal static class Server
     {
-        public void Connect()
+        public static void StartListener()
         {
-            IPAddress localHost = IPAddress.Parse("127.0.0.1");
-            TcpListener server = new TcpListener(localHost, 8000);
+            IPAddress iphost = IPAddress.Parse("127.0.0.1");
+            IPEndPoint localEndPoint = new IPEndPoint(iphost, 9000);
 
-            server.Start();
-            Console.WriteLine("Server is listening on port 8000");
-          
+            Socket listener = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 
+            try
+            {
+                listener.Bind(localEndPoint);
+                listener.Listen(10);
+
+                while (true)
+                {
+                    
+                }
+            }
+            catch(Exception e)
+            {
+                Console.WriteLine(e.ToString());
+            }
         }
     }
 }

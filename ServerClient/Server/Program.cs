@@ -4,10 +4,9 @@ namespace Server
 {
     class Program
     {
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
-            Server server = new Server();
-            server.Connect();
+          Server.StartListener();
         }
     }
 }
