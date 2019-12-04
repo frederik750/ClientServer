@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 
 namespace Server
 {
@@ -6,7 +7,9 @@ namespace Server
     {
         private static void Main(string[] args)
         {
-          Server.StartListener();
+            Thread serverThread = new Thread(new ThreadStart(Server.StartListener));
+            serverThread.Start();
+          
         }
     }
 }
