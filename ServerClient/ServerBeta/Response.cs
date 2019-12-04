@@ -85,7 +85,7 @@ namespace ServerBeta
         public void Post(NetworkStream stream)
         {
             StreamWriter writer = new StreamWriter(stream);
-
+            writer.Flush();
             stream.Write(data, 0, data.Length);
             writer.WriteLine(
                 $"{Server.Version} {status}\r\nServer: {Server.Name}\r\nContent-Type: {mime}\r\nAccept-Ranges: bytes\r\nContent-Length: {data.Length}\r\n");
