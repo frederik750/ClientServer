@@ -9,10 +9,13 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using ServerBeta;
 
-class server
+class Server
 {
 
+    public const String MsgDir = "/msg/";
+    public const String WebDir = "/web/";
     public const String Version = "HTTP/1.1";
+    public const String Name = "Web-Server";
 
     private bool _running = false;
 

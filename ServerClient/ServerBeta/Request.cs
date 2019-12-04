@@ -4,11 +4,11 @@ namespace ServerBeta
 {
     public class Request
     {
-        private String Type { get; set; }
+        public String Type { get; set; }
 
-        private String Url { get; set; }
+        public String Url { get; set; }
 
-        private String Host { get; set; }
+        public String Host { get; set; }
 
     
     
