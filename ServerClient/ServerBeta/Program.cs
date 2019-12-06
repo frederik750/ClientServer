@@ -6,7 +6,7 @@ namespace ServerBeta
     {
         static void Main(string[] args)
         {
-            Server server = new Server();
+            server server = new server();
             server.ServerStart();;
         }
     }

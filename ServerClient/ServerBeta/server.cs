@@ -9,7 +9,7 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using ServerBeta;
 
-class Server
+class server
 {
 
     public const String MsgDir = "/msg/";
@@ -27,7 +27,7 @@ class Server
     public void ServerStart()
     {
         Console.WriteLine("Starting server on: 127.0.0.1:9000");
-        Thread serverThread = new Thread(new ThreadStart(Run));
+        Thread serverThread = new Thread(Run);
         serverThread.Start();
     }
 
