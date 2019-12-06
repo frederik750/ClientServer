@@ -6,7 +6,7 @@ namespace Client
     {
         static void Main(string[] args)
         {
-            Client.RunClient();
+            Client.RunClient("127.0.0.1", 9000);
         }
     }
 }

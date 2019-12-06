@@ -18,6 +18,7 @@ class server
     public const String Name = "Web-Server";
 
     private bool _running = false;
+    public Socket clientSocket;
 
     private static readonly IPAddress IpHost = IPAddress.Parse("127.0.0.1");
     private static readonly IPEndPoint LocalEndPoint = new IPEndPoint(IpHost, 9000);
@@ -27,7 +28,7 @@ class server
     public void ServerStart()
     {
         Console.WriteLine("Starting server on: 127.0.0.1:9000");
-        Thread serverThread = new Thread(Run);
+        Thread serverThread = new Thread(new ThreadStart(Run));
         serverThread.Start();
     }
 
@@ -43,33 +44,28 @@ class server
 
             while (_running)
             {
+                
                 Console.WriteLine("Waiting for connection");
-
-                Socket client = listener.Accept();
-
-
-                HandleClient(client);
-
-                client.Close();
+                clientSocket = listener.Accept();
+                ThreadPool.QueueUserWorkItem(HandleClient);
             }
 
             _running = false;
-
+            clientSocket.Close();
             listener.Close();
-
         }
         catch (Exception e)
         {
             Console.WriteLine(e);
             throw;
         }
+
     }
 
-    private void HandleClient(Socket clientSocket)
+    private void HandleClient(object obj)
     {
         NetworkStream clientNetworkStream = new NetworkStream(clientSocket);
         StreamReader reader = new StreamReader(clientNetworkStream);
-
 
         String msg = "";
 
