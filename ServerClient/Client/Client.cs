@@ -17,32 +17,7 @@ namespace Client
         private static Boolean _isConnected;
 
 
-        public static void RunClient(String ipAddress, int portNum)
-        {
-            _client = new TcpClient();
-            _client.Connect(ipAddress, portNum);
-            HandleCommunication();
-        }
-        public static void HandleCommunication()
-        {
-            _sReader = new StreamReader(_client.GetStream(), Encoding.ASCII);
-            _sWriter = new StreamWriter(_client.GetStream(), Encoding.ASCII);
-            _isConnected = true;
-            String sData = null;
-            while (_isConnected)
-            {
-                Console.Write("> ");
-                sData = Console.ReadLine();
-                // write data and make sure to flush, or the buffer will continue to 
-                // grow, and your data might not be sent when you want it, and will
-                // only be sent once the buffer is filled.
-                _sWriter.WriteLine(sData);
-                _sWriter.Flush();
-                // if you want to receive anything
-                //String sDataIncomming = _sReader.ReadLine();
-            }
-        }
-        /* public static bool Connected = false;
+         public static bool Connected = false;
 
          public static void RunClient()
          {
@@ -62,7 +37,7 @@ namespace Client
                  Console.WriteLine("Connected to -> {0}", sender.RemoteEndPoint);
 
 
-                 byte[] messageSent = Encoding.ASCII.GetBytes("Test Message from client <EOF>");
+                 byte[] messageSent = Encoding.ASCII.GetBytes("GET");
 
                  NetworkStream stream = new NetworkStream(sender);
 
@@ -80,12 +55,11 @@ namespace Client
                   sender.Shutdown(SocketShutdown.Both);
 
                   sender.Close();
-                  sender.Close();
              }
              catch (Exception e)
              {
                  Console.WriteLine(e);
              }
-         }*/
+         }
     }
 }

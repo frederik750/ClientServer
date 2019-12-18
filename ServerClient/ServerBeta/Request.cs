@@ -26,6 +26,7 @@ namespace ServerBeta
         {
             if (string.IsNullOrEmpty(request))
             {
+                Console.WriteLine("Request is empty");
                 return null;
             }
 
