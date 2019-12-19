@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Net.Http;
+using System.Net.Mime;
 using System.Net.Sockets;
 using System.Text;
 
@@ -10,56 +11,44 @@ namespace Client
 {
     internal class Client
     {
-        private static TcpClient _client;
-        private static StreamReader _sReader;
-        private static StreamWriter _sWriter;
+        private static readonly IPAddress IpHost = IPAddress.Parse("127.0.0.1");
+        private static readonly IPEndPoint LocalEndPoint = new IPEndPoint(IpHost, 9000);
 
-        private static Boolean _isConnected;
+        public void RunClient()
+        {
+         
+            string requestGET = "GET / HTTP/1.1\r\nHost: " + IpHost +
+                                "\r\nConnection: Close\r\n\r\n";
 
+            Socket clientSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 
-         public static bool Connected = false;
+            clientSocket.Connect(LocalEndPoint);
 
-         public static void RunClient()
-         {
-             IPAddress iphost = IPAddress.Parse("127.0.0.1");
-             IPEndPoint remoteEndPoint = new IPEndPoint(iphost, 9000);
+            if (clientSocket.Connected)
+            {
+                Console.WriteLine("Connected to server");
+            }
+            else
+            {
+                throw new Exception("Failed to connect to server");
 
-             Socket sender = new Socket(iphost.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
+            }
 
-             try
-             {
+            Byte[] requestBytes = Encoding.ASCII.GetBytes(requestGET);
 
-                 Console.WriteLine("Looking for connection");
+            clientSocket.Send(requestBytes, requestBytes.Length, 0);
 
-                 sender.Connect(remoteEndPoint);
-                 Connected = true;
+            int bytes = 0;
+            Byte[] bytesReceived = new Byte[256];
+            StringBuilder sb = new StringBuilder();
 
-                 Console.WriteLine("Connected to -> {0}", sender.RemoteEndPoint);
+            do
+            {
+                bytes = clientSocket.Receive(bytesReceived, bytesReceived.Length, 0);
+                sb.Append(Encoding.ASCII.GetString(bytesReceived), 0, bytes);
+            } while (bytes > 0);
 
-
-                 byte[] messageSent = Encoding.ASCII.GetBytes("GET");
-
-                 NetworkStream stream = new NetworkStream(sender);
-
-
-                  int byteSent = sender.Send(messageSent);
-
-
-                  byte[] buffer = new byte[1024];
-
-                  int byteReceived = sender.Receive(buffer);
-                  Console.WriteLine("Message from Server -> {0}",
-                      Encoding.ASCII.GetString(buffer,
-                          0, byteReceived));
-
-                  sender.Shutdown(SocketShutdown.Both);
-
-                  sender.Close();
-             }
-             catch (Exception e)
-             {
-                 Console.WriteLine(e);
-             }
-         }
+            Console.WriteLine(sb.ToString());
+        }
     }
 }
