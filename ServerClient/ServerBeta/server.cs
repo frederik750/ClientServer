@@ -44,14 +44,10 @@ class server
 
             while (_running)
             {
-                
-                Console.WriteLine("Waiting for connection");
-                clientSocket = listener.Accept();
                 ThreadPool.QueueUserWorkItem(HandleClient);
             }
 
             _running = false;
-            clientSocket.Close();
             listener.Close();
         }
         catch (Exception e)
@@ -64,6 +60,7 @@ class server
 
     private void HandleClient(object obj)
     {
+        clientSocket = listener.Accept();
         NetworkStream clientNetworkStream = new NetworkStream(clientSocket);
         StreamReader reader = new StreamReader(clientNetworkStream);
 
@@ -74,11 +71,13 @@ class server
             msg += reader.ReadLine() + "\n";
         }
 
-        Debug.WriteLine("Request: \n " + msg);
+        Console.WriteLine("Request: \n " + msg);
 
         Request request = Request.GetRequest(msg);
         Response response = Response.From(request);
 
         response.Post(clientNetworkStream);
+
+        clientSocket.Close();
     }
 }
