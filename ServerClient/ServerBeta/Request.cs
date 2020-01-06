@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ServerBeta
+namespace Server
 {
     public class Request
     {
@@ -17,7 +17,7 @@ namespace ServerBeta
         private Request(String type, String url, String host, String referer)
         {
             Type = type;
-            this.Url = url;
+            Url = url;
             Host = host;
             Referer = referer;
         }
@@ -45,7 +45,6 @@ namespace ServerBeta
                     break;
                 }
             }
-            Console.WriteLine($"{type} {url} @ {host} \nReferer: {referer}");
 
             return new Request(type,url,host, referer);
         }

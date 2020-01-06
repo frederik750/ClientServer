@@ -1,12 +1,10 @@
-﻿using System;
-
-namespace ServerBeta
+﻿namespace Server
 {
     class Program
     {
         static void Main(string[] args)
         {
-            server server = new server();
+            Server server = new Server();
             server.ServerStart();;
         }
     }

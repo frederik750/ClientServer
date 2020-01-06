@@ -1,83 +1,80 @@
-﻿
-using System;
-using System.Diagnostics;
+﻿using System;
 using System.IO;
 using System.Net;
 using System.Net.Sockets;
-using System.Text;
-using System.Text.RegularExpressions;
 using System.Threading;
-using ServerBeta;
 
-class server
+namespace Server
 {
-
-    public const String MsgDir = "/msg/";
-    public const String WebDir = "/web/";
-    public const String Version = "HTTP/1.1";
-    public const String Name = "Web-Server";
-
-    private bool _running = false;
-    public Socket clientSocket;
-
-    private static readonly IPAddress IpHost = IPAddress.Parse("127.0.0.1");
-    private static readonly IPEndPoint LocalEndPoint = new IPEndPoint(IpHost, 9000);
-
-    Socket listener = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-
-    public void ServerStart()
+    class Server
     {
-        Console.WriteLine("Starting server on: 127.0.0.1:9000");
-        Thread serverThread = new Thread(new ThreadStart(Run));
-        serverThread.Start();
-    }
 
+        public const String MsgDir = "/msg/";
+        public const String WebDir = "/web/";
+        public const String Version = "HTTP/1.1";
 
-    private void Run()
-    {
-        _running = true;
+        private bool _running = false;
+        public Socket clientSocket;
 
-        try
+        private static readonly IPAddress IpHost = IPAddress.Parse("127.0.0.1");
+        private static readonly IPEndPoint LocalEndPoint = new IPEndPoint(IpHost, 9000);
+
+        Socket listener = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+
+        public void ServerStart()
         {
-            listener.Bind(LocalEndPoint);
-            listener.Listen(10);
+            Console.WriteLine("Starting server on: 127.0.0.1:9000");
+            Thread serverThread = new Thread(Run);
+            serverThread.Start();
+        }
 
-            while (_running)
+
+        private void Run()
+        {
+            _running = true;
+
+            try
             {
-                ThreadPool.QueueUserWorkItem(HandleClient);
+                listener.Bind(LocalEndPoint);
+                listener.Listen(10);
+
+                while (_running)
+                {
+                    ThreadPool.QueueUserWorkItem(HandleClient);
+                }
+
+                _running = false;
+                listener.Close();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
             }
 
-            _running = false;
-            listener.Close();
         }
-        catch (Exception e)
+
+        private void HandleClient(object obj)
         {
-            Console.WriteLine(e);
-            throw;
+            clientSocket = listener.Accept();
+            NetworkStream clientNetworkStream = new NetworkStream(clientSocket);
+            StreamReader reader = new StreamReader(clientNetworkStream);
+
+            String msg = "";
+
+            while (reader.Peek() != -1)
+            {
+                msg += reader.ReadLine() + "\n";
+            }
+
+            Console.WriteLine("Request: \n " + msg);
+
+            Request request = Request.GetRequest(msg);
+            Response response = Response.From(request);
+
+            response.Header(clientNetworkStream);
+
+            clientSocket.Close();
         }
-
-    }
-
-    private void HandleClient(object obj)
-    {
-        clientSocket = listener.Accept();
-        NetworkStream clientNetworkStream = new NetworkStream(clientSocket);
-        StreamReader reader = new StreamReader(clientNetworkStream);
-
-        String msg = "";
-
-        while (reader.Peek() != -1)
-        {
-            msg += reader.ReadLine() + "\n";
-        }
-
-        Console.WriteLine("Request: \n " + msg);
-
-        Request request = Request.GetRequest(msg);
-        Response response = Response.From(request);
-
-        response.Post(clientNetworkStream);
-
-        clientSocket.Close();
     }
 }
