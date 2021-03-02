@@ -39,7 +39,7 @@ namespace Client
             clientSocket.Send(requestBytes, requestBytes.Length, 0);
 
             int bytes = 0;
-            Byte[] bytesReceived = new Byte[256];
+            Byte[] bytesReceived = new Byte[254];
             StringBuilder sb = new StringBuilder();
 
             do
@@ -49,6 +49,9 @@ namespace Client
             } while (bytes > 0);
 
             Console.WriteLine(sb.ToString());
+            clientSocket.Close();
+            Console.ReadKey();
         }
+
     }
 }

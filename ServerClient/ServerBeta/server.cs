@@ -24,8 +24,8 @@ namespace Server
         public void ServerStart()
         {
             Console.WriteLine("Starting server on: 127.0.0.1:9000");
-            Thread serverThread = new Thread(Run);
-            serverThread.Start();
+            Run();
+            
         }
 
 
@@ -40,7 +40,9 @@ namespace Server
 
                 while (_running)
                 {
-                    ThreadPool.QueueUserWorkItem(HandleClient);
+
+                    Thread clientThread = new Thread(HandleClient);
+                    clientThread.Start();
                 }
 
                 _running = false;
@@ -54,7 +56,7 @@ namespace Server
 
         }
 
-        private void HandleClient(object obj)
+        private void HandleClient()
         {
             clientSocket = listener.Accept();
             NetworkStream clientNetworkStream = new NetworkStream(clientSocket);
